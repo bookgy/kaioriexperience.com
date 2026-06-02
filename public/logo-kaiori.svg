@@ -1,0 +1,15 @@
+<svg width="500" height="200" viewBox="0 0 500 200" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title">
+  <title id="title">Kaiori</title>
+  <defs>
+    <linearGradient id="logo-mark-gradient" x1="43" y1="37" x2="177" y2="166" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#62DDD0"/>
+      <stop offset="0.46" stop-color="#4A9BF9"/>
+      <stop offset="1" stop-color="#214C9A"/>
+    </linearGradient>
+  </defs>
+  <path d="M63 126C63 83 98 48 141 48C126 57 116 73 116 91C116 119 139 142 167 142C152 158 131 168 108 168C82 168 63 150 63 126Z" fill="url(#logo-mark-gradient)"/>
+  <path d="M51 111C71 101 88 86 101 67C101 101 128 128 162 128C143 142 121 150 96 150C77 150 61 135 51 111Z" fill="#214C9A" fill-opacity="0.18"/>
+  <circle cx="169" cy="52" r="7" fill="#62DDD0"/>
+  <circle cx="186" cy="68" r="5" fill="#4A9BF9"/>
+  <text x="215" y="126" fill="#214C9A" font-family="Poppins, Arial, sans-serif" font-size="74" font-weight="700">Kaiori</text>
+</svg>
