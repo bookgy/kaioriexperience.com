@@ -1,4 +1,4 @@
-:HL["/_next/static/chunks/03kog5qtezuyd.css","style"]
+:HL["/_next/static/chunks/0ki1tm26ojq.i.css","style"]
 :HL["https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap","style"]
 :HL["/assets/brand/kaiori-logo-500.png","image"]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"/_not-found","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}},"staleTime":300,"buildId":"afN6JJUwpcm7xzUstt8wm"}
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"/_not-found","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}},"staleTime":300,"buildId":"-UWSgfPdfabexlCbMu97b"}

@@ -1,6 +1,20 @@
 import Icon from "./Icon";
 import { navItems } from "../../src/data/site";
 
+const footerColumns = [
+  ["Quick access", [["Home", "/#home"], ["Free diagnosis", "/free-diagnosis"], ["Services", "/services"], ["Methodology", "/methodology"], ["Contact", "/contact"]]],
+  ["Services", [["Digital audit", "/services#services"], ["Experience diagnosis", "/services#services"], ["Action plan", "/services#services"], ["Mystery Guest", "/mystery-guest"]]],
+  ["Kaiori", [["Kaiori method", "/methodology"], ["What we audit", "/services#what-we-audit"], ["For hospitality", "/#sectors"], ["Work with us", "mailto:mabel@kaiori.com?subject=Kaiori%20-%20Work%20with%20us"]]],
+  ["Legal", [["Legal notice", "/legal-notice"], ["Privacy policy", "/privacy-policy"], ["Cookies policy", "/cookies-policy"], ["Terms and conditions", "/terms-and-conditions"]]],
+];
+
+const footerSocialItems = [
+  { label: "Email", href: "mailto:mabel@kaiori.com", icon: "mail" },
+  { label: "Instagram pending setup", icon: "instagram" },
+  { label: "LinkedIn pending setup", icon: "linkedin" },
+  { label: "YouTube pending setup", icon: "youtube" },
+];
+
 export function Header() {
   const hrefFor = (href) => (href.startsWith("/") ? href : `/${href}`);
   return (
@@ -26,19 +40,6 @@ export function Header() {
 
 export function Footer() {
   const year = new Date().getFullYear();
-  const columns = [
-    ["Quick access", [["Home", "/#home"], ["Free diagnosis", "/free-diagnosis"], ["Services", "/services"], ["Methodology", "/methodology"], ["Contact", "/contact"]]],
-    ["Services", [["Digital audit", "/services#services"], ["Experience diagnosis", "/services#services"], ["Action plan", "/services#services"], ["Mystery Guest", "/mystery-guest"]]],
-    ["Resources", [["Blog", "/blog"], ["Improvement guides", "/blog"], ["Case studies", "/blog"], ["Experience analysis", "/blog"]]],
-    ["Kaiori", [["Kaiori method", "/methodology"], ["What we audit", "/services#what-we-audit"], ["For hospitality", "/#sectors"], ["Work with us", "mailto:mabel@kaiori.com?subject=Kaiori%20-%20Work%20with%20us"]]],
-    ["Legal", [["Legal notice", "/legal-notice"], ["Privacy policy", "/privacy-policy"], ["Cookies policy", "/cookies-policy"], ["Terms and conditions", "/terms-and-conditions"]]],
-  ];
-  const socialItems = [
-    { label: "Email", href: "mailto:mabel@kaiori.com", icon: "mail" },
-    { label: "Instagram pending setup", icon: "instagram" },
-    { label: "LinkedIn pending setup", icon: "linkedin" },
-    { label: "YouTube pending setup", icon: "youtube" },
-  ];
   return (
     <footer className="site-footer">
       <div className="container footer-grid">
@@ -48,11 +49,11 @@ export function Footer() {
           </a>
           <p>Kaiori analyses the real customer experience and turns it into concrete business improvements.</p>
           <a className="btn btn-cyan footer-cta" href="/free-diagnosis">
-            Request a free diagnosis <Icon name="arrowRight" className="icon-sm" />
+            Request a diagnosis <Icon name="arrowRight" className="icon-sm" />
           </a>
         </div>
         <nav className="footer-columns">
-          {columns.map(([title, links]) => (
+          {footerColumns.map(([title, links]) => (
             <div key={title}>
               <h3>{title}</h3>
               {links.map(([label, href]) => (
@@ -63,14 +64,14 @@ export function Footer() {
             </div>
           ))}
         </nav>
-        <div className="footer-language" aria-label="Current language">
+        {/* <div className="footer-language" aria-label="Current language">
           English <Icon name="chevronDown" className="icon-sm" />
-        </div>
+        </div> */}
       </div>
       <div className="container footer-bottom">
         <span>© {year} Kaiori. All rights reserved.</span>
         <div className="footer-social" aria-label="Contact channels">
-          {socialItems.map((item) =>
+          {footerSocialItems.map((item) =>
             item.href ? (
               <a href={item.href} aria-label={item.label} key={item.label}>
                 <Icon name={item.icon} className="icon" />
