@@ -1,0 +1,13 @@
+User-Agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /login/
+Disallow: /panel/
+Disallow: /staging/
+Disallow: /test/
+Disallow: /private/
+Disallow: /tmp/
+Disallow: /api/
+
+Host: https://www.kaiori.com
+Sitemap: https://www.kaiori.com/sitemap.xml
