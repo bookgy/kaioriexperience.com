@@ -21,7 +21,7 @@ export function Header() {
     <header className="site-header">
       <div className="container header-inner">
         <a href="/#home" aria-label="Go to home" className="brand">
-          <img src="/assets/brand/kaiori-logo-500.png" width="500" height="179" alt="Kaiori" />
+          <img src="/assets/brand/kaiori-logo-blue.png" width="500" height="179" alt="Kaiori" />
         </a>
         <nav className="main-nav">
           {navItems.map(([label, href]) => (
@@ -45,7 +45,7 @@ export function Footer() {
       <div className="container footer-grid">
         <div className="footer-brand-block">
           <a href="/#home" aria-label="Go to Kaiori home">
-            <img className="footer-logo" src="/assets/brand/kaiori-logo-500.png" width="500" height="179" alt="Kaiori" />
+            <img className="footer-logo" src="/assets/brand/kaiori-logo-white.png" width="500" height="179" alt="Kaiori" />
           </a>
           <p>Kaiori analyses the real customer experience and turns it into concrete business improvements.</p>
           <a className="btn btn-cyan footer-cta" href="/free-diagnosis">

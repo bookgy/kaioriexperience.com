@@ -8,6 +8,7 @@ Disallow: /test/
 Disallow: /private/
 Disallow: /tmp/
 Disallow: /api/
+Disallow: /docs/
 
 Host: https://www.kaiori.com
 Sitemap: https://www.kaiori.com/sitemap.xml

@@ -63,6 +63,8 @@ p { color: var(--muted); line-height: 1.65; }
 .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 28px; }
 
 .hero-home {
+  position: relative;
+  isolation: isolate;
   min-height: auto;
   display: flex;
   align-items: center;
@@ -70,6 +72,21 @@ p { color: var(--muted); line-height: 1.65; }
     radial-gradient(circle at 84% 18%, rgba(74, 155, 249, .08), transparent 34%),
     linear-gradient(180deg, #f6f8fd 0%, #f7f8fc 100%);
   padding: 72px 0 78px;
+}
+.hero-home::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("/assets/brand/kaiori-icon-transparent@250x250.png");
+  background-repeat: no-repeat;
+  background-position: right 50px bottom 60px ;
+  background-size: clamp(180px, 42vw, 260px);
+  pointer-events: none;
+  z-index: 0;
+}
+.hero-home > * {
+  position: relative;
+  z-index: 1;
 }
 .home-hero-grid { gap: clamp(42px, 5.5vw, 70px); }
 .home-copy { max-width: 560px; }
@@ -419,6 +436,7 @@ p { color: var(--muted); line-height: 1.65; }
 .form-card { display: grid; gap: 18px; border-radius: 32px; background: var(--kaiori-surface); border: 1px solid var(--line); padding: 28px; }
 .hp-field { position: absolute; left: -10000px; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
 .form-grid.two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.phone-grid { display: grid; grid-template-columns: minmax(180px, .9fr) minmax(0, 1.1fr); gap: 18px; }
 label { display: grid; gap: 8px; color: var(--kaiori-navy); font-weight: 700; font-size: 14px; }
 input, select, textarea { width: 100%; border: 1px solid #dce4f1; border-radius: 18px; background: #fff; color: #334155; font: inherit; font-weight: 400; padding: 15px 16px; outline: none; }
 textarea { min-height: 140px; resize: vertical; }
@@ -444,10 +462,9 @@ label span { color: var(--muted); font-size: 12px; font-weight: 400; line-height
   max-width: 320px;
 }
 .footer-logo {
-  height: 44px;
+  height: 60px;
   width: auto;
   margin-bottom: 42px;
-  opacity: .72;
 }
 .footer-brand-block p {
   color: #c3cad8;
@@ -546,6 +563,7 @@ label span { color: var(--muted); font-size: 12px; font-weight: 400; line-height
   .main-nav { display: none; }
   .hero-grid, .form-layout, .footer-grid, .cta-band { grid-template-columns: 1fr; }
   .hero-home { min-height: 0; padding: 56px 0; }
+  .hero-home::before { background-position: right -90px top 26px; background-size: clamp(320px, 54vw, 540px); opacity: .14; }
   .home-copy { max-width: 100%; }
   .home-visual-card { min-height: 500px; justify-self: stretch; max-width: none; }
   .result-grid { grid-template-columns: 1fr; }
@@ -568,6 +586,7 @@ label span { color: var(--muted); font-size: 12px; font-weight: 400; line-height
   .home-badge { font-size: 0.875rem; padding: 10px 14px; }
   .hero-home .hero-actions { gap: 12px; margin-top: 30px; }
   .hero-home .btn { width: 100%; min-height: 52px; padding: 14px 18px; font-size: 0.9375rem; }
+  .hero-home::before { background-position: center top 18px; background-size: min(78vw, 380px); opacity: .12; }
   .home-visual-card { min-height: 440px; padding: 24px 16px 110px; border-radius: 26px; }
   .visual-kicker { font-size: 0.875rem; padding: 11px 14px; }
   .visual-journey { gap: 14px; margin-top: 34px; }
@@ -596,7 +615,7 @@ label span { color: var(--muted); font-size: 12px; font-weight: 400; line-height
   .result-section p { font-size: 1rem; line-height: 1.55; }
   .result-item { grid-template-columns: 38px 1fr; padding: 20px; }
   .result-item p { font-size: 16px; }
-  .grid-2, .grid-3, .grid-4, .form-grid.two { grid-template-columns: 1fr; }
+  .grid-2, .grid-3, .grid-4, .form-grid.two, .phone-grid { grid-template-columns: 1fr; }
   .footer-columns { grid-template-columns: 1fr; }
   .site-footer { padding: 52px 0 24px; }
   .footer-grid { gap: 34px; }
