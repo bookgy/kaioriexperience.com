@@ -9,7 +9,6 @@ const CONTACT_FORM_ENDPOINT =
   "https://desarrollo.bookgy.com/procesos/proceso_recibir_formulario_pagina_kaioriexperience.com.php";
 
 const DEFAULT_COUNTRY_CODE = "ES";
-const DEFAULT_COUNTRY_PREFIX = "+34";
 
 const requestedServices = [
   ["free-diagnosis", "Free diagnosis"],
@@ -199,22 +198,20 @@ function getSubmissionValues(form, sourcePage) {
     .join("\n\n");
 
   return {
-    empresa: form.businessName.trim(),
-    tipoNegocio: form.businessType,
-    tipoNegocioPrincipal: form.businessType,
-    otroTipoNegocio: "",
-    tamanoEmpresa: "",
-    urgenciaProyecto: "",
-    numeroClientes: "",
-    nombre: form.fullName.trim(),
+    fullName: form.fullName.trim(),
+    businessName: form.businessName.trim(),
     email: form.email.trim(),
-    paisPrefijo: form.countryCode,
-    prefijoPais: form.countryPrefix,
-    movil: form.mobile.trim(),
-    telefono: phone,
-    mensaje: message,
-    origen: "kaiori.com",
-    website: form.website || "",
+    countryCode: form.countryCode,
+    countryPrefix: form.countryPrefix,
+    mobile: form.mobile.trim(),
+    businessWebsite: form.businessWebsite.trim(),
+    requestedService: form.requestedService,
+    businessType: form.businessType,
+    preferredDates: form.preferredDates.trim(),
+    message,
+    interestedPhysicalAudit: form.interestedPhysicalAudit ? "1" : "0",
+    legalAccepted: form.legalAccepted ? "1" : "0",
+    sourcePage,
     ...getLeadAttribution(),
   };
 }
@@ -266,9 +263,28 @@ export default function ContactForm({
     }));
   }
 
+  function startNewRequest() {
+    setStatus("idle");
+    setError("");
+    setForm(createInitialForm(defaultService, isMysteryGuest));
+  }
+
+  function scrollToTop() {
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }
+
   async function onSubmit(event) {
     event.preventDefault();
     setError("");
+
+    if (form.website.trim()) {
+      setStatus("success");
+      setForm(createInitialForm(defaultService, isMysteryGuest));
+      scrollToTop();
+      return;
+    }
 
     const validationError = getValidationError(form);
 
@@ -278,9 +294,8 @@ export default function ContactForm({
       return;
     }
 
-    setStatus("loading");
-
     try {
+      setStatus("loading");
       track("form_submit", {
         sourcePage,
         requestedService: form.requestedService,
@@ -294,7 +309,14 @@ export default function ContactForm({
         body: JSON.stringify(getSubmissionValues(form, sourcePage)),
       });
 
-      const result = await response.json();
+      const resultText = await response.text();
+      let result = {};
+
+      try {
+        result = resultText ? JSON.parse(resultText) : {};
+      } catch {
+        result = {};
+      }
 
       if (!response.ok || !result.ok) {
         throw new Error(
@@ -305,6 +327,7 @@ export default function ContactForm({
 
       setStatus("success");
       setForm(createInitialForm(defaultService, isMysteryGuest));
+      scrollToTop();
       track("lead_generated", {
         sourcePage,
         requestedService: form.requestedService,
@@ -345,197 +368,208 @@ export default function ContactForm({
             ))}
           </div>
         </div>
-        <form className="form-card" onSubmit={onSubmit}>
-          <input
-            type="text"
-            name="website"
-            value={form.website}
-            onChange={updateField}
-            tabIndex="-1"
-            autoComplete="off"
-            aria-hidden="true"
-            className="hp-field"
-          />
-          <label>
-            Name *
+        {status === "success" ? (
+          <div className="form-card form-success">
+            <h3>Request received</h3>
+            <p>Thank you for contacting Kaiori.
+              <br></br>
+              <br></br>
+              We will review your case and reply as soon as possible.
+            </p>
+            <button
+              className="btn btn-primary btn-full"
+              type="button"
+              onClick={startNewRequest}
+            >
+              Send new request
+            </button>
+          </div>
+        ) : (
+          <form className="form-card" onSubmit={onSubmit}>
             <input
-              name="fullName"
-              value={form.fullName}
+              type="text"
+              name="website"
+              value={form.website}
               onChange={updateField}
-              placeholder="Your name"
-              autoComplete="name"
-              required
+              tabIndex="-1"
+              autoComplete="off"
+              aria-hidden="true"
+              className="hp-field"
             />
-          </label>
-          <label>
-            Email *
-            <input
-              name="email"
-              type="email"
-              value={form.email}
-              onChange={updateField}
-              placeholder="you@email.com"
-              autoComplete="email"
-              required
-            />
-          </label>
-          <div className="phone-grid">
             <label>
-              Country code *
+              Name *
+              <input
+                name="fullName"
+                value={form.fullName}
+                onChange={updateField}
+                placeholder="Your name"
+                autoComplete="name"
+                required
+              />
+            </label>
+            <label>
+              Email *
+              <input
+                name="email"
+                type="email"
+                value={form.email}
+                onChange={updateField}
+                placeholder="you@email.com"
+                autoComplete="email"
+                required
+              />
+            </label>
+            <div className="phone-grid">
+              <label>
+                Country code *
+                <select
+                  name="countryCode"
+                  value={form.countryCode}
+                  onChange={updateField}
+                  required
+                >
+                  {countryPrefixes.map((country) => (
+                    <option
+                      key={`${country.countryCode}-${country.prefix}`}
+                      value={country.countryCode}
+                    >
+                      {country.label} {country.prefix}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                Mobile *
+                <input
+                  name="mobile"
+                  type="tel"
+                  value={form.mobile}
+                  onChange={updateField}
+                  placeholder="Your mobile number"
+                  autoComplete="tel-national"
+                  inputMode="tel"
+                  required
+                />
+              </label>
+            </div>
+            <label>
+              Business name *
+              <input
+                name="businessName"
+                value={form.businessName}
+                onChange={updateField}
+                placeholder="Your hotel, restaurant, experience or business name"
+                autoComplete="organization"
+                required
+              />
+            </label>
+            <label>
+              Business type *
               <select
-                name="countryCode"
-                value={form.countryCode}
+                name="businessType"
+                value={form.businessType}
                 onChange={updateField}
                 required
               >
-                {countryPrefixes.map((country) => (
-                  <option
-                    key={`${country.countryCode}-${country.prefix}`}
-                    value={country.countryCode}
-                  >
-                    {country.label} {country.prefix}
+                <option value="">Select an option</option>
+                {businessTypes.map((item) => (
+                  <option key={item} value={item}>
+                    {item}
                   </option>
                 ))}
               </select>
             </label>
             <label>
-              Mobile *
+              Website or main link *
               <input
-                name="mobile"
-                type="tel"
-                value={form.mobile}
+                name="businessWebsite"
+                type="url"
+                value={form.businessWebsite}
                 onChange={updateField}
-                placeholder="Your mobile number"
-                autoComplete="tel-national"
-                inputMode="tel"
+                placeholder="https://..."
+                required
+              />
+              <span>
+                It can be your website, Google profile, Booking listing,
+                Instagram or main platform.
+              </span>
+            </label>
+            <label>
+              Service you are interested in
+              <select
+                name="requestedService"
+                value={form.requestedService}
+                onChange={updateField}
+              >
+                {requestedServices.map(([value, label]) => (
+                  <option value={value} key={value}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            {isMysteryGuest ? (
+              <label>
+                Preferred dates or season
+                <input
+                  name="preferredDates"
+                  value={form.preferredDates}
+                  onChange={updateField}
+                  placeholder="E.g. June-July, high season, any available date..."
+                />
+              </label>
+            ) : null}
+            <label className="checkbox">
+              <input
+                type="checkbox"
+                name="interestedPhysicalAudit"
+                checked={form.interestedPhysicalAudit}
+                onChange={updateField}
+              />
+              <span className="checkbox-text">
+                Interested in the special service: Mystery Guest
+              </span>
+            </label>
+            <label>
+              Message *
+              <textarea
+                name="message"
+                value={form.message}
+                onChange={updateField}
+                placeholder={
+                  isMysteryGuest
+                    ? "Tell us about your business, location and what you would like us to review."
+                    : "Briefly tell us what worries you or what you would like to improve."
+                }
                 required
               />
             </label>
-          </div>
-          <label>
-            Business name *
-            <input
-              name="businessName"
-              value={form.businessName}
-              onChange={updateField}
-              placeholder="Your hotel, restaurant, experience or business name"
-              autoComplete="organization"
-              required
-            />
-          </label>
-          <label>
-            Business type *
-            <select
-              name="businessType"
-              value={form.businessType}
-              onChange={updateField}
-              required
-            >
-              <option value="">Select an option</option>
-              {businessTypes.map((item) => (
-                <option key={item} value={item}>
-                  {item}
-                </option>
-              ))}
-            </select>
-          </label>
-                    <label>
-            Website or main link *
-            <input
-              name="businessWebsite"
-              type="url"
-              value={form.businessWebsite}
-              onChange={updateField}
-              placeholder="https://..."
-              required
-            />
-            <span>
-              It can be your website, Google profile, Booking listing,
-              Instagram or main platform.
-            </span>
-          </label>
-          <label>
-            Service you are interested in
-            <select
-              name="requestedService"
-              value={form.requestedService}
-              onChange={updateField}
-            >
-              {requestedServices.map(([value, label]) => (
-                <option value={value} key={value}>
-                  {label}
-                </option>
-              ))}
-            </select>
-          </label>
-          {isMysteryGuest ? (
-            <label>
-              Preferred dates or season
+            <label className="checkbox">
               <input
-                name="preferredDates"
-                value={form.preferredDates}
+                name="legalAccepted"
+                type="checkbox"
+                checked={form.legalAccepted}
                 onChange={updateField}
-                placeholder="E.g. June-July, high season, any available date..."
+                required
               />
+              <span className="checkbox-text">
+                I accept the <a href="/privacy-policy">privacy policy</a> and the
+                processing of my data to respond to this request.
+              </span>
             </label>
-          ) : null}
-          <label className="checkbox">
-            <input
-              type="checkbox"
-              name="interestedPhysicalAudit"
-              checked={form.interestedPhysicalAudit}
-              onChange={updateField}
-            />
-            <span className="checkbox-text">
-              Interested in the special service: Mystery Guest
-            </span>
-          </label>
-          <label>
-            Message *
-            <textarea
-              name="message"
-              value={form.message}
-              onChange={updateField}
-              placeholder={
-                isMysteryGuest
-                  ? "Tell us about your business, location and what you would like us to review."
-                  : "Briefly tell us what worries you or what you would like to improve."
-              }
-              required
-            />
-          </label>
-          <label className="checkbox">
-            <input
-              name="legalAccepted"
-              type="checkbox"
-              checked={form.legalAccepted}
-              onChange={updateField}
-              required
-            />
-            <span className="checkbox-text">
-              I accept the <a href="/privacy-policy">privacy policy</a> and the
-              processing of my data to respond to this request.
-            </span>
-          </label>
-          {status === "error" ? <p className="form-error">{error}</p> : null}
-          {status === "success" ? (
+            {status === "error" ? <p className="form-error">{error}</p> : null}
             <div className="form-success">
-              <h3>Request received</h3>
-              <p>
-                Thank you for contacting Kaiori. We will review your case and
-                reply as soon as possible.
-              </p>
+              <button
+                className="btn btn-primary btn-full"
+                type="submit"
+                disabled={status === "loading"}
+              >
+                {status === "loading" ? "Sending..." : submitButtonText}{" "}
+                <Icon name="send" className="icon-sm" />
+              </button>
             </div>
-          ) : null}
-          <button
-            className="btn btn-primary"
-            type="submit"
-            disabled={status === "loading"}
-          >
-            {status === "loading" ? "Sending..." : submitButtonText}{" "}
-            <Icon name="send" className="icon-sm" />
-          </button>
-        </form>
+          </form>
+        )}
       </div>
     </section>
   );

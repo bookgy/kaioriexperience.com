@@ -155,7 +155,7 @@ Evitar CTAs genericos como:
 
 Campos base recomendados:
 
-- nombre;
+- fullName;
 - email;
 - empresa o negocio;
 - web del negocio;

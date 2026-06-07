@@ -1,5 +1,6 @@
 import "./globals.css";
 import { siteUrl } from "../src/data/seo";
+import VisitorAttribution from "./components/VisitorAttribution";
 
 export const metadata = {
   metadataBase: new URL(siteUrl),
@@ -80,7 +81,10 @@ export default function RootLayout({ children }) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
         />
       </head>
-      <body>{children}</body>
+      <body>
+        <VisitorAttribution />
+        {children}
+      </body>
     </html>
   );
 }

@@ -14,6 +14,6 @@ Estructura sugerida:
 ```text
 app/
   (clients)/
-    nombre-cliente/
+    fullName-cliente/
       page.js
 ```

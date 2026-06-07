@@ -14,6 +14,6 @@ Estructura sugerida para nuevas landings:
 ```text
 app/
   (landings)/
-    nombre-landing/
+    fullName-landing/
       page.js
 ```
