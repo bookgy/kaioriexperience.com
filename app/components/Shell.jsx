@@ -69,7 +69,7 @@ export function Footer() {
         </div> */}
       </div>
       <div className="container footer-bottom">
-        <span>© {year} Kaiori. All rights reserved.</span>
+        <span>© {year} Kaiori. All rights reserved ;)</span>
         <div className="footer-social" aria-label="Contact channels">
           {footerSocialItems.map((item) =>
             item.href ? (
