@@ -22,6 +22,6 @@ echo "Subiendo a GitHub..."
 git push origin main
 
 echo "Ejecutando deploy en CDmon..."
-ssh bookgy4a@134.0.14.185 '/deploy/deploy-agendic.sh'
+ssh bookgy4a@134.0.14.185 '/deploy/deploy-kaioriexperience.sh'
 
 echo "Deploy completado."
